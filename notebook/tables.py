@@ -2,21 +2,28 @@
 import streamlit as st
 from helpers import to_csv
 
-def render_html_table(df, title, filename):
+def render_html_table(df, title, filename, max_rows=200):
     """Renderiza una tabla HTML con scroll, sin índice y con wrap de texto."""
     st.markdown(f"### {title}")
 
     # Nos aseguramos de no mostrar el índice visualmente
     df_no_index = df.reset_index(drop=True)
 
-    # Convertimos a HTML sin índice
-    table_html = df_no_index.to_html(
+    total_rows = len(df_no_index)
+    display_df = df_no_index
+
+    # Limitar filas para mostrar en pantalla
+    if total_rows > max_rows:
+        display_df = df_no_index.head(max_rows)
+        st.caption(f"Mostrando las primeras {max_rows} de {total_rows} filas.")
+
+    # Convertimos solo las filas mostradas a HTML
+    table_html = display_df.to_html(
         index=False,
-        escape=False,   # deja el texto tal cual; si no tienes HTML dentro, no hay problema
+        escape=False,
         classes="diag-table"
     )
 
-    # Lo embebemos en un contenedor con scroll
     st.markdown(
         f"""
         <div class="scroll-table-container">
@@ -26,7 +33,7 @@ def render_html_table(df, title, filename):
         unsafe_allow_html=True
     )
 
-    # Botón de descarga
+    # El CSV se descarga completo (no solo las primeras filas)
     st.download_button(
         f"⬇️ Exportar {title} CSV",
         data=to_csv(df_no_index),
@@ -56,7 +63,8 @@ def render_tables(filtered_df, cols):
     render_html_table(
         diag_df,
         title="🧩 Diagnóstico por cadena y eslabón",
-        filename="diagnostico.csv"
+        filename="diagnostico.csv",
+        max_rows=200,   # puedes bajar a 100 si sigue pesado
     )
 
     st.markdown("---")
@@ -77,5 +85,6 @@ def render_tables(filtered_df, cols):
     render_html_table(
         int_df,
         title="🧠 Intervenciones priorizadas por cadena y eslabón",
-        filename="intervenciones.csv"
+        filename="intervenciones.csv",
+        max_rows=200,
     )
