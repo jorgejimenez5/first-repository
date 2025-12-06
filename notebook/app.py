@@ -47,7 +47,7 @@ def main():
     render_kpis(df, dep_col, cad_col)
 
     # === Layout en dos columnas ===
-    col_filtros, col_resultados = st.columns([1, 2])
+    col_filtros, col_resultados = st.columns([1, 4])
 
     with col_filtros:
         filtered_df = render_filters(df, cols)

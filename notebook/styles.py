@@ -88,6 +88,39 @@ def inject_css():
         /* Ajuste de layout de métricas (si lo necesitas luego) */
         .metrics { display:flex; gap:12px; align-items:center; }
         .metric-card { background:#f8fafc; padding:12px 14px; border-radius:8px; }
+        
+                /* Contenedor con scroll para tablas */
+        .scroll-table-container {
+            max-height: 420px;           /* altura visible de la tabla */
+            overflow-y: auto;            /* scroll vertical */
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: white;
+        }
+
+        .scroll-table-container table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .scroll-table-container th,
+        .scroll-table-container td {
+            padding: 8px 10px;
+            text-align: left;
+            vertical-align: top;
+            border-bottom: 1px solid #e5e7eb;
+            white-space: pre-wrap;       /* permite saltos de línea */
+            word-wrap: break-word;       /* palabra larga se rompe si es necesario */
+        }
+
+        .scroll-table-container thead th {
+            position: sticky;
+            top: 0;
+            background: #f1f5f9;         /* header gris claro */
+            z-index: 1;
+        }
+        
         </style>
         """,
         unsafe_allow_html=True
